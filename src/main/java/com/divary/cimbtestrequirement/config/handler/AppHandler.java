@@ -1,5 +1,6 @@
 package com.divary.cimbtestrequirement.config.handler;
 
+import com.divary.cimbtestrequirement.config.handler.exception.ErrorException;
 import com.divary.cimbtestrequirement.dto.response.BaseResponse;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
