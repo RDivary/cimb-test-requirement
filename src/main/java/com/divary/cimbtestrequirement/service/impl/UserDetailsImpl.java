@@ -2,7 +2,6 @@ package com.divary.cimbtestrequirement.service.impl;
 
 import com.divary.cimbtestrequirement.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@EqualsAndHashCode
 public class UserDetailsImpl implements UserDetails {
-
-    private Long id;
 
     private String username;
 
@@ -24,8 +20,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
+    public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
@@ -37,7 +32,6 @@ public class UserDetailsImpl implements UserDetails {
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         return new UserDetailsImpl(
-                user.getUserId(),
                 user.getUsername(),
                 user.getPasswordHash(),
                 authorities);
