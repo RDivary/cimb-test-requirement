@@ -34,8 +34,8 @@ public class TransactionTypeController extends BaseController {
 
     @GetMapping()
     @PreAuthorize(value = ROLE_USER_ADMIN)
-    public ResponseEntity<BaseResponse<Object>> findAll(@RequestHeader("Authorization") String jwt, @RequestParam(defaultValue = "true") boolean active) {
-        return getResponseOk(transactionTypeService.findAll(jwt, active), "Transaction Type Found");
+    public ResponseEntity<BaseResponse<Object>> findAll(@RequestHeader(AUTHORIZATION) String jwt, @RequestParam(defaultValue = "true") boolean active) {
+        return getResponseList(transactionTypeService.findAll(jwt, active), "Transaction Type Found");
     }
 
     @PutMapping("/{id}")
