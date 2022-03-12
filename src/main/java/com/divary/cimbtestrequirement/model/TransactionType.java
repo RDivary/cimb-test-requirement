@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class TransactionType {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionTypeId;
 
     @Column(length = 50, unique = true, nullable = false)
