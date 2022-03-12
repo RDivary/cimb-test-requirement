@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +51,13 @@ public class AppHandler {
                 .forEach(error -> errorList.put(((FieldError) error).getField(), error.getDefaultMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getResponseBody(HttpStatus.BAD_REQUEST, errorList, "error validation"));
+
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<BaseResponse<Object>> sQLIntegrityConstraintViolationExceptionHandler(SQLIntegrityConstraintViolationException ex) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getResponseBody(HttpStatus.BAD_REQUEST,ex.getMessage()));
 
     }
 
