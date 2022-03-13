@@ -1,6 +1,7 @@
 package com.divary.cimbtestrequirement.model;
 
 import com.divary.cimbtestrequirement.audit.AuditEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class TransactionHistory extends AuditEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
+    @JsonFormat(pattern="HH:mm:ss dd-MM-yyyy")
     private Date createdDate;
 
     @Column(nullable = false)
