@@ -15,7 +15,7 @@
     <description>cimb-test-requirement</description>
     <properties>
         <java.version>1.8</java.version>
-        <sonar.coverage.exclusions>**/*Application.*,**/config/**,**/constant/**,**/security/**,**/dto/**,**/model/**</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>**/*Application.*,**/config/**,**/constant/**,**/security/**,**/dto/**,**/model/**,**/audit/**</sonar.coverage.exclusions>
         <sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
     </properties>
     <dependencies>
@@ -91,6 +91,7 @@
                         <exclude>**/security/**</exclude>
                         <exclude>**/dto/**</exclude>
                         <exclude>**/model/**</exclude>
+                        <exclude>**/audit/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
