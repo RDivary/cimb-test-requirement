@@ -98,7 +98,7 @@ class UserServiceImplTest {
     @Test
     void testFindUser_FAILED_whenUserNotFound_whenRoleIsUser() {
         when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
-        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_ADMIN.toString());
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_USER.toString());
         when(userRepository.findByUsername("username")).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userServiceImpl.findUser("jwt", null));
