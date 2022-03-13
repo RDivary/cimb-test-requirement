@@ -29,11 +29,11 @@ public class TransactionHistory extends AuditEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties(value = {"passwordHash", "role"})
+    @JsonIgnoreProperties(value = {"transactionHistories", "role"})
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "transaction_type_id", nullable = false)
-    @JsonIgnoreProperties(value = {"passwordHash", "role"})
+    @JsonIgnoreProperties(value = {"passwordHash"})
     private TransactionType transactionType;
 }

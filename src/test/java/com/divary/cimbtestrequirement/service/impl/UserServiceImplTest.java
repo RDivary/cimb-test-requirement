@@ -1,7 +1,10 @@
 package com.divary.cimbtestrequirement.service.impl;
 
+import com.divary.cimbtestrequirement.config.handler.exception.NotFoundException;
+import com.divary.cimbtestrequirement.enums.RolesEnum;
 import com.divary.cimbtestrequirement.model.User;
 import com.divary.cimbtestrequirement.repository.UserRepository;
+import com.divary.cimbtestrequirement.security.jwt.JwtUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +25,9 @@ class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private JwtUtils jwtUtils;
+
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
@@ -36,6 +42,74 @@ class UserServiceImplTest {
         when(userRepository.save(any(User.class))).thenReturn(new User());
 
         assertNotNull(userServiceImpl.save(new User()));
+    }
+
+    @Test
+    void testFindUser_OK_whenRoleIsAdminAndIdIsEmpty() {
+        when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_ADMIN.toString());
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(new User()));
+
+        User result = userServiceImpl.findUser("jwt", null);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindUser_OK_whenRoleIsAdminAndIdIsNotEmpty() {
+        when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_ADMIN.toString());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));
+
+        User result = userServiceImpl.findUser("jwt", 1L);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindUser_FAILED_whenUserNotFound_whenRoleIsAdminAndIdIsEmpty() {
+        when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_ADMIN.toString());
+        when(userRepository.findByUsername("username")).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> userServiceImpl.findUser("jwt", null));
+    }
+
+    @Test
+    void testFindUser_FAILED_whenUserNotFound_whenRoleIsAdminAndIdIsNotEmpty() {
+        when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_ADMIN.toString());
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> userServiceImpl.findUser("jwt", 1L));
+    }
+
+    @Test
+    void testFindUser_OK_whenRoleIsUserAndIdIsEmpty() {
+        when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_USER.toString());
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(new User()));
+
+        User result = userServiceImpl.findUser("jwt", null);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindUser_FAILED_whenUserNotFound_whenRoleIsUser() {
+        when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn(RolesEnum.ROLE_ADMIN.toString());
+        when(userRepository.findByUsername("username")).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> userServiceImpl.findUser("jwt", null));
+    }
+
+    @Test
+    void testFindUser_OK_whenRoleIsEmpty() {
+        when(jwtUtils.getUserNameFromJwtToken("jwt")).thenReturn("username");
+        when(jwtUtils.getRoleFromJwtToken("jwt")).thenReturn("");
+
+        assertThrows(NotFoundException.class, () -> userServiceImpl.findUser("jwt", null));
     }
 
     @Test

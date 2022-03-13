@@ -2,9 +2,11 @@ package com.divary.cimbtestrequirement.model;
 
 import com.divary.cimbtestrequirement.enums.RolesEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -30,4 +32,9 @@ public class User {
 
     @Column(nullable = false)
     private RolesEnum role;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnoreProperties(value = {"passwordHash", "role", "user"})
+    private List<TransactionHistory> transactionHistories;
+
 }
