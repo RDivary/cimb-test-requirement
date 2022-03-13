@@ -3,6 +3,7 @@ package com.divary.cimbtestrequirement.service;
 import com.divary.cimbtestrequirement.dto.request.transaction.ExecuteReq;
 import com.divary.cimbtestrequirement.model.TransactionHistory;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface TransactionService {
@@ -11,4 +12,6 @@ public interface TransactionService {
     TransactionHistory findById(String jwt, Long id);
 
     List<TransactionHistory> findAll(String jwt, Long idUser, String transactionName);
+
+    HashMap<String, Object> generateTransactionHistory(String jwt, Long id);
 }

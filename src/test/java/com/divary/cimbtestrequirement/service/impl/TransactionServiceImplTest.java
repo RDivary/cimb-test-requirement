@@ -9,6 +9,7 @@ import com.divary.cimbtestrequirement.model.TransactionType;
 import com.divary.cimbtestrequirement.model.User;
 import com.divary.cimbtestrequirement.repository.TransactionHistoryRepository;
 import com.divary.cimbtestrequirement.security.jwt.JwtUtils;
+import com.divary.cimbtestrequirement.service.ExcelGenerator;
 import com.divary.cimbtestrequirement.service.TransactionTypeService;
 import com.divary.cimbtestrequirement.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +24,7 @@ import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +45,9 @@ class TransactionServiceImplTest {
 
     @Mock
     private JwtUtils jwtUtils;
+
+    @Mock
+    private ExcelGenerator excelGenerator;
 
     @InjectMocks
     private TransactionServiceImpl transactionServiceImpl;
@@ -227,5 +232,18 @@ class TransactionServiceImplTest {
         List<TransactionHistory> result = transactionServiceImpl.findAll("jwt", 1L, "");
 
         assertEquals(0, result.size());
+    }
+
+    @Test
+    void testGenerateTransactionHistory_OK() {
+        when(userService.findUser(anyString(), anyLong())).thenReturn(user);
+        when(excelGenerator.generateTransactionHistory(user)).thenReturn("".getBytes());
+
+        HashMap<String, Object> result = transactionServiceImpl.generateTransactionHistory("jwt", 1L);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertNotNull(result.get("file"));
+        assertNotNull(result.get("fileName"));
     }
 }

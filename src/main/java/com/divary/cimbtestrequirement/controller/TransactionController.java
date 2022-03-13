@@ -3,11 +3,14 @@ package com.divary.cimbtestrequirement.controller;
 import com.divary.cimbtestrequirement.dto.request.transaction.ExecuteReq;
 import com.divary.cimbtestrequirement.dto.response.BaseResponse;
 import com.divary.cimbtestrequirement.service.TransactionService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("api/v1/transaction")
@@ -41,5 +44,25 @@ public class TransactionController extends BaseController {
     @GetMapping("/user")
     public ResponseEntity<BaseResponse<Object>> findAll(@RequestHeader(AUTHORIZATION) String jwt, @RequestParam(defaultValue = "") String transactionName) {
         return getResponseList(transactionService.findAll(jwt, null, transactionName), "Transaction");
+    }
+
+    @PreAuthorize(value = ROLE_USER)
+    @GetMapping(value = "/download-report")
+    public ResponseEntity<Object> downloadReport(@RequestHeader(AUTHORIZATION) String jwt) {
+        HashMap<String, Object> result = transactionService.generateTransactionHistory(jwt, null);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + result.getOrDefault("fileName", "Report Transaction.xlsx"))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(result.get("file"));
+    }
+
+    @PreAuthorize(value = ROLE_ADMIN)
+    @GetMapping(value = "/download-report/{userId}")
+    public ResponseEntity<Object> downloadReport(@RequestHeader(AUTHORIZATION) String jwt, @PathVariable Long userId) {
+        HashMap<String, Object> result = transactionService.generateTransactionHistory(jwt, userId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + result.getOrDefault("fileName", "Report Transaction.xlsx"))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(result.get("file"));
     }
 }

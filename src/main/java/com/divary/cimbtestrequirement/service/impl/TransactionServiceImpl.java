@@ -9,6 +9,7 @@ import com.divary.cimbtestrequirement.model.TransactionType;
 import com.divary.cimbtestrequirement.model.User;
 import com.divary.cimbtestrequirement.repository.TransactionHistoryRepository;
 import com.divary.cimbtestrequirement.security.jwt.JwtUtils;
+import com.divary.cimbtestrequirement.service.ExcelGenerator;
 import com.divary.cimbtestrequirement.service.TransactionService;
 import com.divary.cimbtestrequirement.service.TransactionTypeService;
 import com.divary.cimbtestrequirement.service.UserService;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -31,11 +33,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final JwtUtils jwtUtils;
 
-    public TransactionServiceImpl(TransactionHistoryRepository transactionHistoryRepository, UserService userService, TransactionTypeService transactionTypeService, JwtUtils jwtUtils) {
+    private final ExcelGenerator excelGenerator;
+
+    public TransactionServiceImpl(TransactionHistoryRepository transactionHistoryRepository, UserService userService, TransactionTypeService transactionTypeService, JwtUtils jwtUtils, ExcelGenerator excelGenerator) {
         this.transactionHistoryRepository = transactionHistoryRepository;
         this.userService = userService;
         this.transactionTypeService = transactionTypeService;
         this.jwtUtils = jwtUtils;
+        this.excelGenerator = excelGenerator;
     }
 
     @Override
@@ -96,6 +101,15 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return transactionHistories;
+    }
+
+    @Override
+    public HashMap<String, Object> generateTransactionHistory(String jwt, Long id) {
+        User user = userService.findUser(jwt, id);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("file", excelGenerator.generateTransactionHistory(user));
+        result.put("fileName", "Report Transaction " + user.getUsername() + ".xlsx");
+        return result;
     }
 
     private TransactionHistory findById(Long id) {
