@@ -1,12 +1,10 @@
 package com.divary.cimbtestrequirement.model;
 
 import com.divary.cimbtestrequirement.audit.AuditEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "transaction_history")
@@ -20,11 +18,6 @@ public class TransactionHistory extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionHistoryId;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    @JsonFormat(pattern="HH:mm:ss dd-MM-yyyy")
-    private Date createdDate;
 
     @Column(nullable = false)
     private Long amount;

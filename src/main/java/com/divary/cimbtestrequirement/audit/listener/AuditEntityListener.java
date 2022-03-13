@@ -12,7 +12,7 @@ public class AuditEntityListener {
 
     @PrePersist
     public void prePersist(AuditEntity a) {
-        a.setCreatedDate(new Date());
+        a.setActivityDate(new Date());
     }
 
 }
