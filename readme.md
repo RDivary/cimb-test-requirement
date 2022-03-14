@@ -39,7 +39,7 @@ A step to get build jar
 mvn clean install
 ```
 
-You can see test result at http://localhost:63342/cimb-test-requirement/target/site/jacoco/index.html
+You can see test result at `{your-project-location}/target/site/jacoco/index.html`
 
 ## Run
 
