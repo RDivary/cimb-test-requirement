@@ -170,8 +170,8 @@ if 'User' want see all 'Transaction', user can use http://localhost:8080/api/v1/
 {
   transactionName: [O] string
 }
-if 'user' want download transaction, user can use api http://localhost:8080/api/v1/transaction/download-report/ 'GET':
 ```
+if 'user' want download transaction, user can use api http://localhost:8080/api/v1/transaction/download-report/ 'GET':
 
 ####User
 _you must add authorization with type 'Bearer Token' in header with token given during login_
