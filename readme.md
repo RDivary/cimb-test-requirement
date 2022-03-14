@@ -38,6 +38,7 @@ A step to get build jar
 ```
 mvn clean install
 ```
+You can see test result at `http://localhost:63342/cimb-test-requirement/target/site/jacoco/index.html`
 
 ## Run
 
@@ -54,5 +55,3 @@ Explain how to run the automated tests for this system
 ```
 mvn clean test
 ```
-
-You can see test result at `http://localhost:63342/cimb-test-requirement/target/site/jacoco/index.html`
