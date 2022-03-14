@@ -17,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
 @RequestMapping("api/v1/auth")
 public class AuthController extends BaseController {
 
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;
@@ -26,6 +26,12 @@ public class AuthController extends BaseController {
     @PostMapping("/register")
     public ResponseEntity<BaseResponse<Object>> register(@RequestBody @Valid AuthReq form) throws NoSuchAlgorithmException {
         authService.register(form, RolesEnum.ROLE_USER);
+        return getResponseCreated(null, "Register Success");
+    }
+
+    @PostMapping("/register-admin")
+    public ResponseEntity<BaseResponse<Object>> registerAdmin(@RequestBody @Valid AuthReq form) throws NoSuchAlgorithmException {
+        authService.register(form, RolesEnum.ROLE_ADMIN);
         return getResponseCreated(null, "Register Success");
     }
 
