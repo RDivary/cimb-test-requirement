@@ -3,6 +3,7 @@ package com.divary.cimbtestrequirement.controller;
 import com.divary.cimbtestrequirement.dto.request.transaction.ExecuteReq;
 import com.divary.cimbtestrequirement.dto.response.BaseResponse;
 import com.divary.cimbtestrequirement.service.TransactionService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,31 +25,36 @@ public class TransactionController extends BaseController {
 
     @PreAuthorize(value = ROLE_USER)
     @PostMapping()
-    public ResponseEntity<BaseResponse<Object>> create(@RequestHeader(AUTHORIZATION) String jwt, @RequestBody @Valid ExecuteReq form) {
+    @ApiOperation("Execute Transaction")
+    public ResponseEntity<BaseResponse<Object>> create(@RequestHeader(name = AUTHORIZATION, required = false) String jwt, @RequestBody @Valid ExecuteReq form) {
         return getResponseCreated(transactionService.execute(jwt, form), "Register Success");
     }
 
     @PreAuthorize(value = ROLE_USER_ADMIN)
     @GetMapping("/{userId}")
-    public ResponseEntity<BaseResponse<Object>> findById(@RequestHeader(AUTHORIZATION) String jwt, @PathVariable Long userId) {
+    @ApiOperation("Find Transaction By Id")
+    public ResponseEntity<BaseResponse<Object>> findById(@RequestHeader(name = AUTHORIZATION, required = false) String jwt, @PathVariable Long userId) {
         return getResponseOk(transactionService.findById(jwt, userId), "Transaction Found");
     }
 
     @PreAuthorize(value = ROLE_ADMIN)
     @GetMapping("/user/{userId}")
-    public ResponseEntity<BaseResponse<Object>> findAll(@RequestHeader(AUTHORIZATION) String jwt, @PathVariable() Long userId, @RequestParam(defaultValue = "") String transactionName) {
+    @ApiOperation("Find All Another User Transaction")
+    public ResponseEntity<BaseResponse<Object>> findAll(@RequestHeader(name = AUTHORIZATION, required = false) String jwt, @PathVariable() Long userId, @RequestParam(defaultValue = "") String transactionName) {
         return getResponseList(transactionService.findAll(jwt, userId, transactionName), "Transaction");
     }
 
     @PreAuthorize(value = ROLE_USER_ADMIN)
     @GetMapping("/user")
-    public ResponseEntity<BaseResponse<Object>> findAll(@RequestHeader(AUTHORIZATION) String jwt, @RequestParam(defaultValue = "") String transactionName) {
+    @ApiOperation("Find All Transaction")
+    public ResponseEntity<BaseResponse<Object>> findAll(@RequestHeader(name = AUTHORIZATION, required = false) String jwt, @RequestParam(defaultValue = "") String transactionName) {
         return getResponseList(transactionService.findAll(jwt, null, transactionName), "Transaction");
     }
 
     @PreAuthorize(value = ROLE_USER)
     @GetMapping(value = "/download-report")
-    public ResponseEntity<Object> downloadReport(@RequestHeader(AUTHORIZATION) String jwt) {
+    @ApiOperation("Download Transaction xlsx format")
+    public ResponseEntity<Object> downloadReport(@RequestHeader(name = AUTHORIZATION, required = false) String jwt) {
         HashMap<String, Object> result = transactionService.generateTransactionHistory(jwt, null);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + result.getOrDefault("fileName", "Report Transaction.xlsx"))
@@ -58,7 +64,8 @@ public class TransactionController extends BaseController {
 
     @PreAuthorize(value = ROLE_ADMIN)
     @GetMapping(value = "/download-report/{userId}")
-    public ResponseEntity<Object> downloadReport(@RequestHeader(AUTHORIZATION) String jwt, @PathVariable Long userId) {
+    @ApiOperation("Download Transaction Another User xlsx format")
+    public ResponseEntity<Object> downloadReport(@RequestHeader(name = AUTHORIZATION, required = false) String jwt, @PathVariable Long userId) {
         HashMap<String, Object> result = transactionService.generateTransactionHistory(jwt, userId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + result.getOrDefault("fileName", "Report Transaction.xlsx"))

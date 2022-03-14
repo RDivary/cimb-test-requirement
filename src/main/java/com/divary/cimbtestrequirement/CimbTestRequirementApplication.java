@@ -2,10 +2,14 @@ package com.divary.cimbtestrequirement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
+@EnableWebMvc
+@EnableOpenApi
 @SpringBootApplication
 public class CimbTestRequirementApplication {
 
@@ -17,6 +21,4 @@ public class CimbTestRequirementApplication {
     public void init() {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+7"));
     }
-
-
 }

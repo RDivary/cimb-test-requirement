@@ -86,6 +86,8 @@ public class HttpLogInterface {
     List<String> urls = new ArrayList<>();
     urls.add("/v3/api-docs");
     urls.add("/swagger-ui/(.*)");
+    urls.add("/swagger-resources/(.*)");
+    urls.add("/swagger-resources");
     return urls;
   }
 }

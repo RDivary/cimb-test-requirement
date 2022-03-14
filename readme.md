@@ -48,6 +48,9 @@ A step for running this service
 java -jar target/application.jar
 ```
 
+## Running Swagger
+You can access `http://{your-port-service}/swagger-ui/index.html` for view API Documentation using Swagger
+
 ## Running The Tests
 
 Explain how to run the automated tests for this system
